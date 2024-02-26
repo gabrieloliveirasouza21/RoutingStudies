@@ -8,6 +8,13 @@ var app = builder.Build();
 //habilita para usar rotas
 app.UseRouting();
 
+app.Use(async (HttpContext context,RequestDelegate next) =>
+{
+    Endpoint? endpoint = context.GetEndpoint();
+    if (endpoint != null) await context.Response.WriteAsync($"{endpoint.DisplayName}\n\n");
+    await next(context);
+});
+
 //aqui é onde se cria os endpoints usando Map() ; MapGet() ou MapPost().
 app.UseEndpoints(endpoints =>
 {
