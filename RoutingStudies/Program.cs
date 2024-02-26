@@ -11,14 +11,14 @@ app.UseRouting();
 //aqui é onde se cria os endpoints usando Map() ; MapGet() ou MapPost().
 app.UseEndpoints(endpoints =>
 {
-    endpoints.Map("/files/{filename}.{extension}", async (context) =>
+    endpoints.Map("/files/{filename}.{extension=txt}", async (context) =>
     {
         string? file = context.Request.RouteValues["filename"].ToString();
         string? ext = context.Request.RouteValues["extension"].ToString();
         await context.Response.WriteAsync($"{file}.{ext}");
     });
 
-    endpoints.MapPost("/employee/profile/{name}", async (context) =>
+    endpoints.MapPost("/employee/profile/{name=lucas}", async (context) =>
     {
         string? nome = context.Request.RouteValues["name"].ToString();
         await context.Response.WriteAsync($"{nome}");
