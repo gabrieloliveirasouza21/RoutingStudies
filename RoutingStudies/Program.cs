@@ -8,29 +8,20 @@ var app = builder.Build();
 //habilita para usar rotas
 app.UseRouting();
 
-app.Use(async (HttpContext context,RequestDelegate next) =>
-{
-    Endpoint? endpoint = context.GetEndpoint();
-    if (endpoint != null) await context.Response.WriteAsync($"{endpoint.DisplayName}\n\n");
-    await next(context);
-});
-
 //aqui é onde se cria os endpoints usando Map() ; MapGet() ou MapPost().
 app.UseEndpoints(endpoints =>
 {
-    endpoints.Map("homePage", async (HttpContext context) =>
+    endpoints.Map("/files/{filename}.{extension}", async (context) =>
     {
-        await context.Response.WriteAsync("HomePage aqui");
+        string? file = context.Request.RouteValues["filename"].ToString();
+        string? ext = context.Request.RouteValues["extension"].ToString();
+        await context.Response.WriteAsync($"{file}.{ext}");
     });
 
-    endpoints.MapGet("aboutPage", async (HttpContext context) =>
+    endpoints.MapPost("/employee/profile/{name}", async (context) =>
     {
-        await context.Response.WriteAsync("About page com metodo GET");
-    });
-
-    endpoints.MapPost("contactsPage", async (HttpContext context) =>
-    {
-        await context.Response.WriteAsync("Contacts Page com metodo POST");
+        string? nome = context.Request.RouteValues["name"].ToString();
+        await context.Response.WriteAsync($"{nome}");
     });
 });
 
